@@ -75,3 +75,14 @@ black_promotions = ['bishop', 'knight', 'rook', 'queen']
 black_moved = [False, False, False, False, False, False, False, False,
                False, False, False, False, False, False, False, False]
 piece_list = ['pawn', 'queen', 'king', 'knight', 'rook', 'bishop']
+# check variables/ flashing counter
+counter = 0
+winner = ''
+game_over = False
+white_ep = (100, 100)
+black_ep = (100, 100)
+white_promote = False
+black_promote = False
+promo_index = 100
+check = False
+castling_moves = []
