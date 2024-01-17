@@ -1,3 +1,145 @@
+# Function to draw the chess board
+def draw_board():
+for i in range(32):
+column = i % 4
+row = i // 4
+# Alternate colors for the squares
+if row % 2 == 0:
+pygame.draw.rect(screen, &#39;light gray&#39;, [600 - (column * 200), row * 100, 100, 100])
+else:
+pygame.draw.rect(screen, &#39;light gray&#39;, [700 - (column * 200), row * 100, 100, 100])
+# Draw additional board elements
+pygame.draw.rect(screen, &#39;gray&#39;, [0, 800, WIDTH, 100])
+pygame.draw.rect(screen, &#39;gold&#39;, [0, 800, WIDTH, 100], 5)
+pygame.draw.rect(screen, &#39;gold&#39;, [800, 0, 200, HEIGHT], 5)
+ # Status text for player turns
+status_text = [&#39;White: Select a Piece to Move!&#39;, &#39;White: Select a Destination!&#39;,
+&#39;Black: Select a Piece to Move!&#39;, &#39;Black: Select a Destination!&#39;]
+screen.blit(big_font.render(status_text[turn_step], True, &#39;black&#39;), (20, 820))
+# Draw grid lines for the board
+for i in range(9):
+pygame.draw.line(screen, &#39;black&#39;, (0, 100 * i), (800, 100 * i), 2)
+pygame.draw.line(screen, &#39;black&#39;, (100 * i, 0), (100 * i, 800), 2)
+# Forfeit option on the board
+screen.blit(medium_font.render(&#39;FORFEIT&#39;, True, &#39;black&#39;), (810, 830))
+
+
+# draw pieces onto board
+def draw_pieces():
+# Process each piece in white_pieces array
+for i in range(len(white_pieces)):
+index = piece_list.index(white_pieces[i])
+# Drawing white pieces on the board
+if white_pieces[i] == &#39;pawn&#39;:
+screen.blit(white_pawn, (white_locations[i][0] * 100 + 22, white_locations[i][1] * 100 + 30))
+else:
+screen.blit(white_images[index], (white_locations[i][0] * 100 + 10, white_locations[i][1] * 100
++ 10))
+# Highlighting the selected piece
+if turn_step &lt; 2:
+if selection == i:
+pygame.draw.rect(screen, &#39;red&#39;, [white_locations[i][0] * 100 + 1, white_locations[i][1] * 100
++ 1,
+100, 100], 2)
+# Similar logic for drawing black pieces
+for i in range(len(black_pieces)):
+index = piece_list.index(black_pieces[i])
+if black_pieces[i] == &#39;pawn&#39;:
+screen.blit(black_pawn, (black_locations[i][0] * 100 + 22, black_locations[i][1] * 100 + 30))
+else:
+
+screen.blit(black_images[index], (black_locations[i][0] * 100 + 10, black_locations[i][1] * 100 +
+10))
+if turn_step &gt;= 2:
+if selection == i:
+pygame.draw.rect(screen, &#39;blue&#39;, [black_locations[i][0] * 100 + 1, black_locations[i][1] * 100
++ 1,
+100, 100], 2)
+
+# function to check all pieces valid options on board
+def check_options(pieces, locations, turn):
+moves_list = []
+all_moves_list = []
+for i in range((len(pieces))):
+location = locations[i]
+piece = pieces[i]
+if piece == &#39;pawn&#39;:
+moves_list = check_pawn(location, turn)
+elif piece == &#39;rook&#39;:
+moves_list = check_rook(location, turn)
+elif piece == &#39;knight&#39;:
+moves_list = check_knight(location, turn)
+elif piece == &#39;bishop&#39;:
+moves_list = check_bishop(location, turn)
+elif piece == &#39;queen&#39;:
+moves_list = check_queen(location, turn)
+elif piece == &#39;king&#39;:
+moves_list = check_king(location, turn)
+all_moves_list.append(moves_list)
+return all_moves_list
+
+# check king valid moves
+def check_king(position, color):
+moves_list = []
+if color == &#39;white&#39;:
+enemies_list = black_locations
+friends_list = white_locations
+else:
+friends_list = black_locations
+enemies_list = white_locations
+# 8 squares to check for kings, they can go one square any direction
+targets = [(1, 0), (1, 1), (1, -1), (-1, 0), (-1, 1), (-1, -1), (0, 1), (0, -1)]
+for i in range(8):
+target = (position[0] + targets[i][0], position[1] + targets[i][1])
+if target not in friends_list and 0 &lt;= target[0] &lt;= 7 and 0 &lt;= target[1] &lt;= 7:
+moves_list.append(target)
+return moves_list
+
+# check queen valid moves
+def check_queen(position, color):
+moves_list = check_bishop(position, color)
+second_list = check_rook(position, color)
+for i in range(len(second_list)):
+moves_list.append(second_list[i])
+return moves_list
+
+# check bishop moves
+def check_bishop(position, color):
+moves_list = []
+if color == &#39;white&#39;:
+
+enemies_list = black_locations
+friends_list = white_locations
+else:
+friends_list = black_locations
+enemies_list = white_locations
+for i in range(4): # up-right, up-left, down-right, down-left
+path = True
+chain = 1
+if i == 0:
+x = 1
+y = -1
+elif i == 1:
+x = -1
+y = -1
+elif i == 2:
+x = 1
+y = 1
+else:
+x = -1
+y = 1
+while path:
+if (position[0] + (chain * x), position[1] + (chain * y)) not in friends_list and \
+0 &lt;= position[0] + (chain * x) &lt;= 7 and 0 &lt;= position[1] + (chain * y) &lt;= 7:
+moves_list.append((position[0] + (chain * x), position[1] + (chain * y)))
+if (position[0] + (chain * x), position[1] + (chain * y)) in enemies_list:
+path = False
+chain += 1
+else:
+path = False
+return moves_list
+
+
 # draw captured pieces on side of screen
 def draw_captured():
     for i in range(len(captured_pieces_white)):
