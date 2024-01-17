@@ -353,3 +353,38 @@ while run:
 
     pygame.display.flip()
 pygame.quit()
+
+def check_rook(position, color):
+moves_list = []
+if color == &#39;white&#39;:
+enemies_list = black_locations
+friends_list = white_locations
+else:
+friends_list = black_locations
+enemies_list = white_locations
+for i in range(4): # down, up, right, left
+path = True
+chain = 1
+if i == 0:
+x = 0
+y = 1
+elif i == 1:
+x = 0
+y = -1
+elif i == 2:
+x = 1
+y = 0
+else:
+x = -1
+y = 0
+while path:
+if (position[0] + (chain * x), position[1] + (chain * y)) not in friends_list and \
+0 &lt;= position[0] + (chain * x) &lt;= 7 and 0 &lt;= position[1] + (chain * y) &lt;= 7:
+moves_list.append((position[0] + (chain * x), position[1] + (chain * y)))
+if (position[0] + (chain * x), position[1] + (chain * y)) in enemies_list:
+path = False
+chain += 1
+
+else:
+path = False
+return moves_list
