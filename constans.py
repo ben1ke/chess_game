@@ -1,6 +1,57 @@
 import pygame
 pygame.init()
 
+
+def check_pawn(position, color):
+    moves_list = []
+
+    # Check moves for a white pawn
+    if color == 'white':
+        # Check if the square directly ahead is open
+        if (position[0], position[1] + 1) not in white_locations and \
+           (position[0], position[1] + 1) not in black_locations and position[1] < 7:
+            moves_list.append((position[0], position[1] + 1))
+        
+        # Check if the pawn is in its initial position and can move two squares ahead
+        if (position[0], position[1] + 2) not in white_locations and \
+           (position[0], position[1] + 2) not in black_locations and position[1] == 1:
+            moves_list.append((position[0], position[1] + 2))
+        
+        # Check if the pawn can capture an opponent's piece diagonally
+        if (position[0] + 1, position[1] + 1) in black_locations:
+            moves_list.append((position[0] + 1, position[1] + 1))
+        if (position[0] - 1, position[1] + 1) in black_locations:
+            moves_list.append((position[0] - 1, position[1] + 1))
+
+        # Check for 'en passant' move
+        if (position[0] + 1, position[1] + 1) == black_ep:
+            moves_list.append((position[0] + 1, position[1] + 1))
+        if (position[0] - 1, position[1] + 1) == black_ep:
+            moves_list.append((position[0] - 1, position[1] + 1))
+
+    # Check moves for a black pawn
+    else:
+if (position[0], position[1] - 1) not in white_locations and \
+(position[0], position[1] - 1) not in black_locations and position[1] &gt; 0:
+moves_list.append((position[0], position[1] - 1))
+# indent the check for two spaces ahead, so it is only checked if one space ahead is also open
+if (position[0], position[1] - 2) not in white_locations and \
+(position[0], position[1] - 2) not in black_locations and position[1] == 6:
+moves_list.append((position[0], position[1] - 2))
+if (position[0] + 1, position[1] - 1) in white_locations:
+moves_list.append((position[0] + 1, position[1] - 1))
+if (position[0] - 1, position[1] - 1) in white_locations:
+moves_list.append((position[0] - 1, position[1] - 1))
+# add en passant move checker
+if (position[0] + 1, position[1] - 1) == white_ep:
+
+moves_list.append((position[0] + 1, position[1] - 1))
+if (position[0] - 1, position[1] - 1) == white_ep:
+moves_list.append((position[0] - 1, position[1] - 1))
+return moves_list
+
+
+
 WIDTH = 1000
 HEIGHT = 900
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
