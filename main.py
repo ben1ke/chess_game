@@ -443,7 +443,7 @@ options_list = black_options
 valid_options = options_list[selection]
 return valid_options
 
-# draw valid moves on screen
+# draw valid moves on the screen
 def draw_valid(moves):
 if turn_step &lt; 2:
 color = &#39;red&#39;
