@@ -433,3 +433,22 @@ target = (position[0] + targets[i][0], position[1] + targets[i][1])
 if target not in friends_list and 0 &lt;= target[0] &lt;= 7 and 0 &lt;= target[1] &lt;= 7:
 moves_list.append(target)
 return moves_list
+
+# check for valid moves for just selected piece
+def check_valid_moves():
+if turn_step &lt; 2:
+options_list = white_options
+else:
+options_list = black_options
+valid_options = options_list[selection]
+return valid_options
+
+# draw valid moves on screen
+def draw_valid(moves):
+if turn_step &lt; 2:
+color = &#39;red&#39;
+
+else:
+color = &#39;blue&#39;
+for i in range(len(moves)):
+pygame.draw.circle(screen, color, (moves[i][0] * 100 + 50, moves[i][1] * 100 + 50), 5)
